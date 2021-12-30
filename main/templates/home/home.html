@@ -5,9 +5,51 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
     <title>Django-Map</title>
 </head>
 <body>
 <h1>Map time!</h1>
+<div id='map' style='width: 1300px; height: 700px;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiZ2xvY2tjYyIsImEiOiJja3hzdHkxM2gzNHY3Mnhxa2VwcHQ0NXo0In0.PD0hFlw0GuGQWWPfEQYy1A';
+// var map = new mapboxgl.Map({
+// container: 'map',
+// style: 'mapbox://styles/mapbox/streets-v11',
+//     center: [31.04788164627155,49.03053138300308]
+// });
+const map = new mapboxgl.Map({
+container: 'map', // container ID
+center: [30.6291,50.2632], // starting position [lng, lat]
+zoom: 8, // starting zoom
+style: 'mapbox://styles/mapbox/streets-v11',
+hash: true,
+transformRequest: (url, resourceType) => {
+if (resourceType === 'Source' && url.startsWith('http://myHost')) {
+return {
+url: url.replace('http', 'https'),
+headers: {'my-custom-header': true},
+credentials: 'include'  // Include cookies for cross-origin requests
+};
+}
+}
+});
+const marker = new mapboxgl.Marker({
+draggable: true
+})
+.setLngLat([30.6008,50.4625])
+.addTo(map);
+
+function onDragEnd() {
+const lngLat = marker.getLngLat();
+coordinates.style.display = 'block';
+coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+}
+
+marker.on('dragend', onDragEnd);
+
+</script>
+
 </body>
 </html>
