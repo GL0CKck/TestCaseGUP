@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main.apps.MainConfig',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'testcasegup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'main',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env('POSTGRE_DB'),
         'USER': env('POSTGRE_USER'),
         'PASSWORD': env('POSTGRE_PASSWORD'),
