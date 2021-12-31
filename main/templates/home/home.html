@@ -9,16 +9,11 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
     <title>Django-Map</title>
 </head>
-<body>
+<body onload="myFunction()">
 <h1>Map time!</h1>
 <div id='map' style='width: 1300px; height: 700px;'></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2xvY2tjYyIsImEiOiJja3hzdHkxM2gzNHY3Mnhxa2VwcHQ0NXo0In0.PD0hFlw0GuGQWWPfEQYy1A';
-// var map = new mapboxgl.Map({
-// container: 'map',
-// style: 'mapbox://styles/mapbox/streets-v11',
-//     center: [31.04788164627155,49.03053138300308]
-// });
 const map = new mapboxgl.Map({
 container: 'map', // container ID
 center: [30.6291,50.2632], // starting position [lng, lat]
@@ -40,16 +35,17 @@ draggable: true
 })
 .setLngLat([30.6008,50.4625])
 .addTo(map);
+const marker1 = new mapboxgl.Marker({
+draggable: true
+})
+.setLngLat([30.602651,50.448114])
+.addTo(map);
 
-function onDragEnd() {
-const lngLat = marker.getLngLat();
-coordinates.style.display = 'block';
-coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
-}
-
-marker.on('dragend', onDragEnd);
 
 </script>
+
+
+
 
 </body>
 </html>
