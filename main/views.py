@@ -4,7 +4,9 @@ from .models import Point
 
 
 def index(request):
-    return render(request, 'home/home.html')
+    ad = Point.objects.all()
+    context = {'ad': ad}
+    return render(request, 'home/home.html', context)
 
 
 class PointView(CreateView):

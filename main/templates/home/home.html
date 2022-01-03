@@ -30,18 +30,14 @@ credentials: 'include'  // Include cookies for cross-origin requests
 }
 }
 });
-const marker = new mapboxgl.Marker({
-draggable: true
+{% for a in ad %}
+var marker = new mapboxgl.Marker({
+draggable: false
 })
-.setLngLat([30.6008,50.4625])
+.setLngLat(['{{a.longitude}}','{{a.latitude}}'])
 .addTo(map);
-const marker1 = new mapboxgl.Marker({
-draggable: true
-})
-.setLngLat([30.602651,50.448114])
-.addTo(map);
-
+{% endfor %}
 </script>
-</body>
 <a href="{% url 'main:createpoint' %}">Создать объявление</a>
+</body>
 </html>
