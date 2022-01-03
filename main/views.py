@@ -1,9 +1,17 @@
 from django.shortcuts import render
+from django.views.generic.edit import CreateView
+from .models import Point
 
 
 def index(request):
     return render(request, 'home/home.html')
 
+
+class PointView(CreateView):
+    model = Point
+    fields = ['title', 'address', 'price', 'image', 'descriptions']
+    template_name = 'home/createpoint.html'
+    success_url = '/home'
 
 
 
