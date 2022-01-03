@@ -1,3 +1,4 @@
+{% load thumbnail %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -35,7 +36,9 @@ var marker = new mapboxgl.Marker({
 draggable: false
 })
 .setLngLat(['{{a.longitude}}','{{a.latitude}}'])
+.setPopup(new mapboxgl.Popup().setHTML('<h1>{{a.title}}</h1><h1><img src="{% thumbnail a.image 'default' %}" ></h1>'))
 .addTo(map);
+
 {% endfor %}
 </script>
 <a href="{% url 'main:createpoint' %}">Создать объявление</a>
