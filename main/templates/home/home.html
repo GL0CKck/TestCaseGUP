@@ -1,4 +1,5 @@
 {% load thumbnail %}
+{% load pagination_tags %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,10 +10,15 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
     <title>Django-Map</title>
+    <style>
+        #map { position: absolute; left: 0; top: 100px; width: 80%; }
+        #ad { position: absolute; right: 0; top: 0; width: 20%; }
+    </style>
 </head>
-<body onload="myFunction()">
+<body>
 <h1>Map time!</h1>
-<div id='map' style='width: 1300px; height: 700px;'></div>
+<a href="{% url 'main:createpoint' %}">Создать объявление</a>
+<div id='map' style='width: 1200px; height: 650px;'></div>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2xvY2tjYyIsImEiOiJja3hzdHkxM2gzNHY3Mnhxa2VwcHQ0NXo0In0.PD0hFlw0GuGQWWPfEQYy1A';
 const map = new mapboxgl.Map({
@@ -26,7 +32,7 @@ if (resourceType === 'Source' && url.startsWith('http://myHost')) {
 return {
 url: url.replace('http', 'https'),
 headers: {'my-custom-header': true},
-credentials: 'include'  // Include cookies for cross-origin requests
+credentials: 'include'
 };
 }
 }
@@ -36,11 +42,82 @@ var marker = new mapboxgl.Marker({
 draggable: false
 })
 .setLngLat(['{{a.longitude}}','{{a.latitude}}'])
-.setPopup(new mapboxgl.Popup().setHTML('<h1>{{a.title}}</h1><h1><img src="{% thumbnail a.image 'default' %}" ></h1>'))
+.setPopup(new mapboxgl.Popup().setHTML('<h1>{{a.title}} - {{a.price}} UA</h1><h1><img src="{% thumbnail a.image 'default' %}" ></h1>'))
 .addTo(map);
 
 {% endfor %}
+map.on('load', () => {
+
+map.addSource('pointid', {
+type: 'geojson',
+cluster: true,
+clusterRadius: 20,
+clusterMaxZoom: 1,
+data: {
+'type': 'FeatureCollection',
+'features': [ {% for a in ad %}
+{
+'type': 'Feature',
+'geometry': {
+'type': 'Point',
+'coordinates': [
+'{{a.longitude}}','{{a.latitude}}'
+]
+},
+},
+{% endfor %}]
+}
+});
+map.addLayer({
+id: 'unclustered-point',
+type: 'circle',
+source: 'pointid',
+filter: ['!', ['has', 'point_count']],
+paint: {
+'circle-color': '#11b4da',
+'circle-radius': 6,
+'circle-stroke-width': 1,
+'circle-stroke-color': '#fff'
+}
+});
+map.addLayer({
+id: 'cluster-count',
+type: 'symbol',
+source: 'pointid',
+filter: ['get', 'point_count'],
+layout: {
+'text-size': 12,
+}
+});
+map.on('click', 'unclustered-point', (e) => {
+
+new mapboxgl.Popup()
+.setLngLat(['{{a.longitude}}','{{a.latitude}}'])
+.setPopup(new mapboxgl.Popup().setHTML('<h1>{{a.title}} - {{a.price}} UA</h1><h1><img src="{% thumbnail a.image 'default' %}" ></h1>'))
+.addTo(map);
+});
+});
+
 </script>
-<a href="{% url 'main:createpoint' %}">Создать объявление</a>
+<div id="ad">
+{% autopaginate ad 5 %}
+<ul  class="list-unstyled">
+    <h1>Последние 5 объявлений</h1>
+{% for a in ad %}
+    {{a.title}}
+<li class="media my-5 p-3 border">
+
+<a href="{{ url }}{{ all }}" >
+<img class="mr-3 " src="{% thumbnail  a.image 'default' %} ">
+</a>
+<div  class="media-body" >
+<h3>{{a.address}}</a></h3>
+<p class="text-right  font-weight-bold">{{a.price}} UA. </p>
+</div>
+</li>
+{% endfor %}
+</ul>
+    </div>
+
 </body>
 </html>

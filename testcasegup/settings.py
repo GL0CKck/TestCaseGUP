@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'main',
     'rest_framework',
     'easy_thumbnails',
+    'django_pagination_bootstrap',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_pagination_bootstrap.middleware.PaginationMiddleware',
 ]
 
 ROOT_URLCONF = 'testcasegup.urls'
