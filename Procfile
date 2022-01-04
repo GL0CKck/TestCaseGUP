@@ -1,1 +1,1 @@
-web: gunicorn testcasegup.wsgi --log-file -
+web: gunicorn testcasegup.wsgi
