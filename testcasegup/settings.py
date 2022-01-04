@@ -88,8 +88,7 @@ DATABASES = {
         'NAME': env('POSTGRE_DB'),
         'USER': env('POSTGRE_USER'),
         'PASSWORD': env('POSTGRE_PASSWORD'),
-        'HOST': env('POSTGRE_HOST'),
-        'PORT': env('POSTGRE_PORT'),
+
     }
 }
 
